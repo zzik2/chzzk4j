@@ -8,19 +8,6 @@ plugins {
 group = "io.github.r2turntrue"
 version = "0.1.6"
 
-val publishProps = Properties()
-val publishPropsFile = File("publish.properties")
-if (publishPropsFile.exists()) {
-    publishProps.load(publishPropsFile.inputStream())
-}
-
-ext["signing.keyId"] = publishProps["signing.keyId"] ?: ""
-ext["signing.password"] = publishProps["signing.password"] ?: ""
-ext["signing.secretKeyRingFile"] = publishProps["signing.secretKeyRingFile"] ?: ""
-
-val sonatypeUsername = (publishProps["nexusUsername"] as? String) ?: ""
-val sonatypePassword = (publishProps["nexusPassword"] as? String) ?: ""
-
 repositories {
     mavenCentral()
 }
@@ -73,47 +60,4 @@ object Meta {
     val DEVELOPER_NAME = "R2turnTrue"
     val DEVELOPER_ORGANIZATION = "R2turnTrue"
     val DEVELOPER_ORGANIZATION_URL = "https://github.com/R2turnTrue"
-}
-
-sonatypeCentralPublishExtension {
-    // Set group ID, artifact ID, version, and other publication details
-    groupId.set(Meta.GROUP)
-    artifactId.set(Meta.ARTIFACT_ID)
-    version.set(Meta.VERSION)
-    componentType.set(Meta.COMPONENT_TYPE) // "java" or "versionCatalog"
-    publishingType.set(Meta.PUBLISHING_TYPE) // USER_MANAGED or AUTOMATIC
-
-    // Set username and password for Sonatype repository
-    username.set(System.getenv("SONATYPE_USERNAME") ?: sonatypeUsername)
-    password.set(System.getenv("SONATYPE_PASSWORD") ?: sonatypePassword)
-
-    // Configure POM metadata
-    pom {
-        name.set(Meta.ARTIFACT_ID)
-        description.set(Meta.DESC)
-        url.set("https://github.com/${Meta.GITHUB_REPO}")
-        licenses {
-            license {
-                name.set(Meta.LICENSE)
-                url.set(Meta.LICENSE_URL)
-            }
-        }
-        developers {
-            developer {
-                id.set(Meta.DEVELOPER_ID)
-                name.set(Meta.DEVELOPER_NAME)
-                organization.set(Meta.DEVELOPER_ORGANIZATION)
-                organizationUrl.set(Meta.DEVELOPER_ORGANIZATION_URL)
-            }
-        }
-        scm {
-            url.set("https://github.com/${Meta.GITHUB_REPO}")
-            connection.set("scm:git:https://github.com/${Meta.GITHUB_REPO}")
-            developerConnection.set("scm:git:https://github.com/${Meta.GITHUB_REPO}")
-        }
-        issueManagement {
-            system.set("GitHub")
-            url.set("https://github.com/${Meta.GITHUB_REPO}/issues")
-        }
-    }
 }
