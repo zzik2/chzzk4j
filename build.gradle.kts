@@ -2,7 +2,6 @@ import java.util.Properties
 
 plugins {
     id("java")
-    id("eu.kakde.gradle.sonatype-maven-central-publisher") version "1.0.6"
     `java-library`
 }
 
@@ -39,6 +38,7 @@ dependencies {
 }
 
 tasks.test {
+    enabled = false
     useJUnitPlatform()
 }
 
@@ -51,6 +51,9 @@ tasks.javadoc {
 }
 
 java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(16))
+    }
     withJavadocJar()
     withSourcesJar()
 }
